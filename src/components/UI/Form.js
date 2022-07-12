@@ -81,7 +81,7 @@ const useFormState = ( initialObject ) => {
 }
 
 // -----------------------------------------
-// Compose Action Object ///////////////////
+// Compose Form Object /////////////////////
 // -----------------------------------------
 
 Form.Item = Item;
