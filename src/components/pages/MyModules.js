@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import moduleAccessor from '../model/moduleAccessor.js';
 import useLoad from '../model/useLoad.js';
+import Modal from '../UI/Modal.js';
 import { CardContainer } from '../UI/Card.js';
 import ModuleCard from '../entities/Modules/ModuleCard.js';
 import ModuleForm from '../entities/Modules/ModuleForm.js';
 import ToolTipDecorator from '../UI/ToolTipDecorator.js';
 import Action from '../UI/Actions.js';
-import Modal from '../UI/Modal.js';
 import './MyModules.css';
 
 import RenderCount from '../UI/RenderCount.js';
@@ -20,12 +20,9 @@ export default function MyModules() {
   const [showFavourites, setShowFavourites] = useState(false);
   const [modules, setModules, loadingMessage, loadModules] = useLoad(moduleAccessor);
   
-  const [showModal, setShowModal] = useState(false);
-  const [modalHeading, setModalHeading] = useState(undefined);
-  const [modalContent, setModalContent] = useState(undefined);
-  const [modalActions, setModalActions] = useState([]);
-
   // Context -------------------------------------
+  const { handleModal } = Modal.useModal();
+
   // Methods -------------------------------------
   // Select handler
   const handleSelect = (name) => console.log(`Module ${name} selected`);
@@ -50,22 +47,19 @@ export default function MyModules() {
     outcome.success && loadModules();
   }
 
-  const handleDeleteRequest = (id) => {
-    const deleteModule = modules.find((module) => module.ModuleID === id);
-    setModalHeading("Alert!");
-    setModalContent(<p>Are you sure you want to delete module {deleteModule.ModuleCode} {deleteModule.ModuleName}?</p>);
-    setModalActions(
-      [
-        <ToolTipDecorator key="ActionYes" message="Click to confirm deletion">
-          <Action.Yes showText onClick={() => handleDelete(id)} />
-        </ToolTipDecorator>,
-        <ToolTipDecorator key="ActionNo" message="Click to abandon deletion">
-          <Action.No showText onClick={() => handleDismiss()} />
-        </ToolTipDecorator>
-      ]
-    );
-    setShowModal(true);
-  };
+  const handleDeleteRequest = (module) => handleModal({
+    show: true,
+    title: "Alert!",
+    content: <p>Are you sure you want to delete module {module.ModuleCode} {module.ModuleName}?</p>,
+    actions: [
+      <ToolTipDecorator key="ActionYes" message="Click to confirm deletion">
+        <Action.Yes showText onClick={() => handleDelete(module.ModuleID)} />
+      </ToolTipDecorator>,
+      <ToolTipDecorator key="ActionNo" message="Click to abandon deletion">
+        <Action.No showText onClick={() => handleDismiss()} />
+      </ToolTipDecorator>
+    ]
+  });
 
   // Add handlers
   const handleAdd = async (newModule) => {
@@ -76,12 +70,12 @@ export default function MyModules() {
     outcome.success && loadModules();
   }
 
-  const handleAddRequest = () => {
-    setModalHeading("Add new module");
-    setModalContent(<ModuleForm onSubmit={handleAdd} onCancel={handleDismiss} />);
-    setModalActions(null);
-    setShowModal(true);
-  };
+  const handleAddRequest = () => handleModal({
+    show: true,
+    title: "Add new module",
+    content: <ModuleForm onSubmit={handleAdd} onCancel={handleDismiss} />,
+    actions: null
+  });
 
   // Modify handlers
   const handleModify = async (targetModule) => {
@@ -92,15 +86,15 @@ export default function MyModules() {
     outcome.success && loadModules();
   }
 
-  const handleModifyRequest = (targetModule) => {
-    setModalHeading("Modify module");
-    setModalContent(<ModuleForm onSubmit={handleModify} onCancel={handleDismiss} initialModule={targetModule} />);
-    setModalActions(null);
-    setShowModal(true);
-  };
+  const handleModifyRequest = (targetModule) => handleModal({
+    show: true,
+    title: "Modify module",
+    content: <ModuleForm onSubmit={handleModify} onCancel={handleDismiss} initialModule={targetModule} />,
+    actions: null
+  });
 
-  // Modal handlers
-  const handleDismiss = () => setShowModal(false);
+  // Modal handler
+  const handleDismiss = () => handleModal(false);
 
   // View ----------------------------------------
   return (
@@ -146,13 +140,6 @@ export default function MyModules() {
                     )
                   }
                 </CardContainer>
-      }
-
-      {
-        showModal &&
-          <Modal title={modalHeading} actions={modalActions}>
-            {modalContent}
-          </Modal>
       }
     </>
   )

@@ -12,10 +12,10 @@ export default function App() {
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path='*' element={<PageNotFound />} />
           <Route path='/' element={<MyModules />} />
-          <Route path='/assessments'  element={<MyAssessments />} />
+          <Route path='/assessments' element={<MyAssessments />} />
           <Route path='/schedule' element={<MySchedule />} />
+          <Route path='*' element={<PageNotFound />} />
         </Routes>
       </Layout>
     </BrowserRouter>

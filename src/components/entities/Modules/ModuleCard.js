@@ -71,7 +71,7 @@ export default function ModuleCard({module,handlers}) {
                 <Action.Modify onClick={() => handlers.handleModify(module)} />
               </ToolTipDecorator>
               <ToolTipDecorator message="Delete module from list">
-                <Action.Delete onClick={() => handlers.handleDelete(module.ModuleID)} />
+                <Action.Delete onClick={() => handlers.handleDelete(module)} />
               </ToolTipDecorator>
             </Action.Tray>
           </div>
