@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import moduleAccessor from '../model/moduleAccessor.js';
 import useLoad from '../model/useLoad.js';
 import Modal from '../UI/Modal.js';
-import { CardContainer } from '../UI/Card.js';
+import Card from '../UI/Card.js';
 import ModuleCard from '../entities/Modules/ModuleCard.js';
 import ModuleForm from '../entities/Modules/ModuleForm.js';
 import ToolTipDecorator from '../UI/ToolTipDecorator.js';
@@ -16,6 +17,8 @@ import RenderCount from '../UI/RenderCount.js';
 
 export default function MyModules() {
   // Properties ----------------------------------
+  const navigate = useNavigate();
+
   // State ---------------------------------------
   const [showFavourites, setShowFavourites] = useState(false);
   const [modules, setModules, loadingMessage, loadModules] = useLoad(moduleAccessor);
@@ -25,7 +28,7 @@ export default function MyModules() {
 
   // Methods -------------------------------------
   // Select handler
-  const handleSelect = (name) => console.log(`Module ${name} selected`);
+  const handleSelect = (name) => navigate('/classlist');
 
   // List handlers
   const handleListAllModules = () => setShowFavourites(false);
@@ -122,7 +125,7 @@ export default function MyModules() {
           ? <p>{loadingMessage}</p>
           : modules.length === 0
               ? <p>No modules found</p>
-              : <CardContainer>
+              : <Card.Container>
                   {
                     modules.map((module) => 
                       (!showFavourites || module.isSubscribed) &&
@@ -139,7 +142,7 @@ export default function MyModules() {
                         />
                     )
                   }
-                </CardContainer>
+                </Card.Container>
       }
     </>
   )

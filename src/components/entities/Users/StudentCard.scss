@@ -1,0 +1,44 @@
+/* -------------------------------------------- */
+/* Styling //////////////////////////////////// */
+/* -------------------------------------------- */
+
+div.studentCardLayout {
+  display: flex;
+  font-size: 90%;
+  width: 400px;
+
+  // Image section
+  & > div.cardImage {
+    width: 130px;
+    height: 130px;
+    border-radius: 5px 0px 0px 5px;
+
+    & > img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 5px 0px 0px 5px;
+    }
+  }
+
+  & > div.cardRightPane {
+    flex: 1;
+
+    div.cardDetails {
+      width: 100%;
+      padding: 10px;
+    
+      & > h1 { font-size: inherit; }
+      & > p > span { 
+        color: Grey; 
+        &.cardAttribute::after { content: " "; }
+      }
+    }
+
+    // Actions section
+    & > div.cardActions {
+      float: right;
+      padding-right: 10px;
+    }
+  }
+}

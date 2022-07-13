@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react';
-import { Card } from './Card.js';
+import Card from './Card.js';
 import Action from './Actions.js';
 import './Modal.css';
 
