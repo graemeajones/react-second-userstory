@@ -1,24 +1,13 @@
 import PropTypes from 'prop-types';
 import './Card.css';
 
-CardContainer.propTypes = {
-  className: PropTypes.string
-};
-
-export function CardContainer({ children, className="" }) {
-  return (
-    <div className={"CardContainer " + className}>
-      {children}
-    </div>
-  );
-}
 
 Card.propTypes = {
   onClick: PropTypes.func,
   isParentHovering: PropTypes.bool
 };
 
-export function Card({ children, onClick, isParentHovering=false }) {
+export default function Card({ children, onClick, isParentHovering=false }) {
   // Properties ----------------------------------
   // Hooks ---------------------------------------
   // Context -------------------------------------
@@ -30,3 +19,21 @@ export function Card({ children, onClick, isParentHovering=false }) {
     </div>
   );
 }
+
+Container.propTypes = {
+  className: PropTypes.string
+};
+
+function Container({ children, className="" }) {
+  return (
+    <div className={"CardContainer " + className}>
+      {children}
+    </div>
+  );
+}
+
+// -----------------------------------------
+// Compose Card Object /////////////////////
+// -----------------------------------------
+
+Card.Container = Container;

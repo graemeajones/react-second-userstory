@@ -123,7 +123,7 @@ export default function ModuleForm({ onSubmit, onCancel, initialModule = emptyMo
                   {
                     staff.map((user) => 
                       <option key={user.UserID} value={user.UserID} >
-                        {user.UserSurname}, {user.UserFirstname}
+                        {user.UserLastname}, {user.UserFirstname}
                       </option>
                     )
                   }

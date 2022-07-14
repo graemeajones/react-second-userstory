@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import HoverDecorator from '../../UI/HoverDecorator.js';
 import FavouriteDecorator from '../../UI/FavouriteDecorator.js';
-import { Card } from '../../UI/Card.js';
+import Card from '../../UI/Card.js';
 import ToolTipDecorator from '../../UI/ToolTipDecorator.js';
 import Action from '../../UI/Actions.js';
 import './ModuleCard.scss';
@@ -43,13 +43,13 @@ export default function ModuleCard({module,handlers}) {
             unFavourite={() => handlers.handleUnsubscribe(module.ModuleID)}
         />
 
-        <div className="cardLayout">
+        <div className="moduleCardLayout">
 
-          <div className="cardImage"  onClick={() => handlers.handleSelect(module.ModuleCode)}>
+          <div className="cardImage"  onClick={() => handlers.handleSelect(module.ModuleID)}>
             <img src={module.ModuleImage} alt="Visual representation of module" />
           </div>
 
-          <div className="cardDetails"  onClick={() => handlers.handleSelect(module.ModuleCode)}>
+          <div className="cardDetails"  onClick={() => handlers.handleSelect(module.ModuleID)}>
             <h1>{module.ModuleName} ({module.ModuleCode})</h1>
             <p>
               <span className="cardAttribute">Level</span>
