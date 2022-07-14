@@ -1,14 +1,11 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import moduleAccessor from '../model/moduleAccessor.js';
 import useLoad from '../model/useLoad.js';
 import Modal from '../UI/Modal.js';
-import Card from '../UI/Card.js';
-import ModuleCard from '../entities/Modules/ModuleCard.js';
+import ModuleList from '../entities/Modules/ModuleList.js';
 import ModuleForm from '../entities/Modules/ModuleForm.js';
 import ToolTipDecorator from '../UI/ToolTipDecorator.js';
 import Action from '../UI/Actions.js';
-import './MyModules.css';
 
 import RenderCount from '../UI/RenderCount.js';
 
@@ -20,7 +17,6 @@ export default function MyModules() {
   const navigate = useNavigate();
 
   // State ---------------------------------------
-  const [showFavourites, setShowFavourites] = useState(false);
   const [modules, setModules, loadingMessage, loadModules] = useLoad(moduleAccessor);
   
   // Context -------------------------------------
@@ -28,12 +24,8 @@ export default function MyModules() {
 
   // Methods -------------------------------------
   // Select handler
-  const handleSelect = (name) => navigate('/classlist');
+  const handleSelect = (name) => navigate('/students');
 
-  // List handlers
-  const handleListAllModules = () => setShowFavourites(false);
-  const handleListFavourites = () => setShowFavourites(true);
-  
   // Favourite handlers
   const handleSubscribe = (id) => setModules(
     modules.map((module) => module.ModuleID === id ? { ...module, isSubscribed: true } : module)
@@ -100,50 +92,30 @@ export default function MyModules() {
   const handleDismiss = () => handleModal(false);
 
   // View ----------------------------------------
+  const listActions = [
+    <ToolTipDecorator message="Add a new module">
+      <Action.Add showText onClick={handleAddRequest} />
+    </ToolTipDecorator>
+  ];
+
   return (
     <>
-      <RenderCount background="Red" />
+      <RenderCount background="Yellow" fontColor="Black" />
+
       <h1>My Modules</h1>
 
-      <Action.Tray>
-        {
-          showFavourites
-            ? <ToolTipDecorator message="List all modules">
-                <Action.ListAll showText onClick={handleListAllModules} />
-              </ToolTipDecorator>
-            : <ToolTipDecorator message="List favourite modules">
-                <Action.Favourites showText onClick={handleListFavourites} />
-              </ToolTipDecorator>
-        }
-        <ToolTipDecorator message="Add a new module">
-          <Action.Add showText onClick={handleAddRequest} />
-        </ToolTipDecorator>
-      </Action.Tray>
-
-      {
-        !modules
-          ? <p>{loadingMessage}</p>
-          : modules.length === 0
-              ? <p>No modules found</p>
-              : <Card.Container>
-                  {
-                    modules.map((module) => 
-                      (!showFavourites || module.isSubscribed) &&
-                        <ModuleCard
-                          key={module.ModuleID}
-                          module={module}
-                          handlers={{
-                            handleSelect,
-                            handleSubscribe,
-                            handleUnsubscribe,
-                            handleModify: handleModifyRequest,
-                            handleDelete: handleDeleteRequest
-                          }}
-                        />
-                    )
-                  }
-                </Card.Container>
-      }
+      <ModuleList
+        modules={modules}
+        loadingMessage={loadingMessage}
+        actions={listActions}
+        handlers={{
+          handleSelect,
+          handleSubscribe,
+          handleUnsubscribe,
+          handleModify: handleModifyRequest,
+          handleDelete: handleDeleteRequest
+        }}
+      />
     </>
   )
 }

@@ -3,15 +3,13 @@ import useLoad from '../model/useLoad.js';
 import Modal from '../UI/Modal.js';
 import ToolTipDecorator from '../UI/ToolTipDecorator.js';
 import Action from '../UI/Actions.js';
-import Card from '../UI/Card.js';
-import StudentCard from '../entities/Users/StudentCard.js';
+import StudentList from '../entities/Users/StudentList.js';
 import StudentForm from '../entities/Users/StudentForm.js';
-import './MyModules.css';
 
 import RenderCount from '../UI/RenderCount.js';
 
 
-export default function ModuleClasslist({module}) {
+export default function MyStudents({module}) {
   // Properties ----------------------------------
   // State ---------------------------------------
   const [students, , loadingMessage, loadStudents] = useLoad(userAccessor);
@@ -76,38 +74,28 @@ export default function ModuleClasslist({module}) {
   const handleDismiss = () => handleModal(false);
 
   // View ----------------------------------------
+  const listActions = [
+    <ToolTipDecorator message="Add a new student">
+      <Action.Add showText onClick={handleAddRequest} />
+    </ToolTipDecorator>
+  ];
+
   return (
     <>
-      <RenderCount background="Red" />
+      <RenderCount background="Yellow" fontColor="Black" />
+      
       <h1>Class List</h1>
 
-      <Action.Tray>
-        <ToolTipDecorator message="Add a new student">
-          <Action.Add showText onClick={handleAddRequest} />
-        </ToolTipDecorator>
-      </Action.Tray>
-
-      {
-        !students
-          ? <p>{loadingMessage}</p>
-          : students.length === 0
-              ? <p>No students found</p>
-              : <Card.Container>
-                  {
-                    students.map((student) => 
-                        <StudentCard
-                          key={student.UserID}
-                          student={student}
-                          handlers={{
-                            handleSelect,
-                            handleModify: handleModifyRequest,
-                            handleDelete: handleDeleteRequest
-                          }}
-                        />
-                    )
-                  }
-                </Card.Container>
-      }
+      <StudentList
+        students={students}
+        loadingMessage={loadingMessage}
+        actions={listActions}
+        handlers={{
+          handleSelect,
+          handleModify: handleModifyRequest,
+          handleDelete: handleDeleteRequest
+        }}
+      />
     </>
   )
 }
