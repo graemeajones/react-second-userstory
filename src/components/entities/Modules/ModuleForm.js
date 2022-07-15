@@ -5,7 +5,7 @@ import Form from '../../UI/Form.js';
 import RenderCount from '../../UI/RenderCount.js';
 
 
-const emptyModule = { ModuleName: "", ModuleCode: "", ModuleLevel: 0, ModuleLeaderID: 0, ModuleImage: "" };
+const emptyModule = { ModuleName: "", ModuleCode: "", ModuleLevel: 0, ModuleLeaderID: 0, ModuleImageURL: "" };
 
 export default function ModuleForm({ onSubmit, onCancel, initialModule = emptyModule }) {
   
@@ -45,7 +45,7 @@ export default function ModuleForm({ onSubmit, onCancel, initialModule = emptyMo
     ModuleCode: (code) => /^\D{2}\d{4}$/.test(code),
     ModuleLevel: (level) => (level > 2) && (level < 8),
     ModuleLeaderID: (id) => id !== 0,
-    ModuleImage: (url) => /^(http|https):\/\/(([a-zA-Z0-9$\-_.+!*'(),;:&=]|%[0-9a-fA-F]{2})+@)?(((25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9]|[1-9][0-9]|[0-9])(\.(25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9]|[1-9][0-9]|[0-9])){3})|localhost|([a-zA-Z0-9\-\u00C0-\u017F]+\.)+([a-zA-Z]{2,}))(:[0-9]+)?(\/(([a-zA-Z0-9$\-_.+!*'(),;:@&=]|%[0-9a-fA-F]{2})*(\/([a-zA-Z0-9$\-_.+!*'(),;:@&=]|%[0-9a-fA-F]{2})*)*)?(\?([a-zA-Z0-9$\-_.+!*'(),;:@&=/?]|%[0-9a-fA-F]{2})*)?(#([a-zA-Z0-9$\-_.+!*'(),;:@&=/?]|%[0-9a-fA-F]{2})*)?)?$/.test(url)
+    ModuleImageURL: (url) => /^(http|https):\/\/(([a-zA-Z0-9$\-_.+!*'(),;:&=]|%[0-9a-fA-F]{2})+@)?(((25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9]|[1-9][0-9]|[0-9])(\.(25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9]|[1-9][0-9]|[0-9])){3})|localhost|([a-zA-Z0-9\-\u00C0-\u017F]+\.)+([a-zA-Z]{2,}))(:[0-9]+)?(\/(([a-zA-Z0-9$\-_.+!*'(),;:@&=]|%[0-9a-fA-F]{2})*(\/([a-zA-Z0-9$\-_.+!*'(),;:@&=]|%[0-9a-fA-F]{2})*)*)?(\?([a-zA-Z0-9$\-_.+!*'(),;:@&=/?]|%[0-9a-fA-F]{2})*)?(#([a-zA-Z0-9$\-_.+!*'(),;:@&=/?]|%[0-9a-fA-F]{2})*)?)?$/.test(url)
   };
     
   const errorMessage = {
@@ -53,7 +53,7 @@ export default function ModuleForm({ onSubmit, onCancel, initialModule = emptyMo
     ModuleCode: "Module code is not a valid format",
     ModuleLevel: "Invalid module level",
     ModuleLeaderID: "No module leader has been selected",
-    ModuleImage: "Module image is not a valid URL"
+    ModuleImageURL: "Module image is not a valid URL"
   }
 
   // View ----------------------------------------
@@ -134,12 +134,12 @@ export default function ModuleForm({ onSubmit, onCancel, initialModule = emptyMo
       <Form.Item
         label="Module image URL"
         advice="Provide the URL of an image"
-        error={errors.ModuleImage}
+        error={errors.ModuleImageURL}
       >
         <input
           type="text"
-          name="ModuleImage"
-          value={module.ModuleImage}
+          name="ModuleImageURL"
+          value={module.ModuleImageURL}
           onChange={handleChange} 
         />
       </Form.Item>

@@ -46,7 +46,7 @@ export default function ModuleCard({module,handlers}) {
         <div className="moduleCardLayout">
 
           <div className="cardImage"  onClick={() => handlers.handleSelect(module.ModuleID)}>
-            <img src={module.ModuleImage} alt="Visual representation of module" />
+            <img src={module.ModuleImageURL} alt="Visual representation of module" />
           </div>
 
           <div className="cardDetails"  onClick={() => handlers.handleSelect(module.ModuleID)}>
