@@ -10,7 +10,7 @@ const emptyUser = {
   UserPassword: "",
   UserRegistered: false,
   UserUsertypeID: 0,
-  UserCohortID: 0,
+  UserLevel: 0,
   UserImageURL: ""
 }
 
@@ -28,7 +28,7 @@ export default function StudentForm({ onSubmit, onCancel, initialUser = emptyUse
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    const newValue = (name === 'UserUsertypeID') || (name === 'UserCohortID') ? parseInt(value) : value;
+    const newValue = (name === 'UserUsertypeID') || (name === 'UserLevel') ? parseInt(value) : value;
     setUser({ ...user, [name]: newValue });
     setErrors({ ...errors, [name]: isValid[name](newValue) ? null : errorMessage[name] });
   };
@@ -53,7 +53,7 @@ export default function StudentForm({ onSubmit, onCancel, initialUser = emptyUse
     UserPassword: (password) => password.length > 7,
     UserRegistered: (status) => status === true || status === false,
     UserUsertypeID: (id) => id !== 0,
-    UserCohortID: (id) => id !== 0,
+    UserLevel: (id) => id !== 0,
     UserImageURL: (url) => /^(http|https):\/\/(([a-zA-Z0-9$\-_.+!*'(),;:&=]|%[0-9a-fA-F]{2})+@)?(((25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9]|[1-9][0-9]|[0-9])(\.(25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9]|[1-9][0-9]|[0-9])){3})|localhost|([a-zA-Z0-9\-\u00C0-\u017F]+\.)+([a-zA-Z]{2,}))(:[0-9]+)?(\/(([a-zA-Z0-9$\-_.+!*'(),;:@&=]|%[0-9a-fA-F]{2})*(\/([a-zA-Z0-9$\-_.+!*'(),;:@&=]|%[0-9a-fA-F]{2})*)*)?(\?([a-zA-Z0-9$\-_.+!*'(),;:@&=/?]|%[0-9a-fA-F]{2})*)?(#([a-zA-Z0-9$\-_.+!*'(),;:@&=/?]|%[0-9a-fA-F]{2})*)?)?$/.test(url)
   };
     
@@ -64,7 +64,7 @@ export default function StudentForm({ onSubmit, onCancel, initialUser = emptyUse
     UserPassword: `Password must be at least 8 characters long`,
     UserRegistered: "Registration status has not been selected",
     UserUsertypeID: "No user type has been selected",
-    UserCohortID: "No cohort has been selected",
+    UserLevel: "Level has not been selected",
     UserImageURL: "User image is not a valid URL"
   }
 
@@ -116,23 +116,6 @@ export default function StudentForm({ onSubmit, onCancel, initialUser = emptyUse
       </Form.Item>
 
       <Form.Item
-        label="User level"
-        advice="Choose a level between 3 and 7 inclusive"
-        error={errors.UserCohortID}
-      >
-        <select
-          name="UserCohortID"
-          value={user.UserCohortID}
-          onChange={handleChange} 
-        >
-          <option value="0" disabled>Select user's cohort level</option>
-          {
-            [3, 4, 5, 6, 7].map((level) => <option key={level}>{level}</option>)
-          }
-        </select>
-      </Form.Item>
-
-      <Form.Item
         label="User type"
         error={errors.UserUsertypeID}
       >
@@ -147,6 +130,23 @@ export default function StudentForm({ onSubmit, onCancel, initialUser = emptyUse
                 <option key={type.id} value={type.id}>{type.name}</option>
               )
             }
+        </select>
+      </Form.Item>
+
+      <Form.Item
+        label="User level"
+        advice="Choose a level between 3 and 7 inclusive"
+        error={errors.UserLevel}
+      >
+        <select
+          name="UserLevel"
+          value={user.UserLevel}
+          onChange={handleChange} 
+        >
+          <option value="0" disabled>Select user's level</option>
+          {
+            [3, 4, 5, 6, 7].map((level) => <option key={level}>{level}</option>)
+          }
         </select>
       </Form.Item>
 
