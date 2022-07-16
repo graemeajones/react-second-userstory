@@ -13,10 +13,10 @@ ModuleCard.propTypes = {
   module: PropTypes.shape({
     isSubscribed: PropTypes.bool,
     ModuleID: PropTypes.number.isRequired,
-    ModuleImage: PropTypes.string.isRequired,
     ModuleName: PropTypes.string.isRequired,
     ModuleCode: PropTypes.string.isRequired,
-    ModuleLevel: PropTypes.number.isRequired
+    ModuleLevel: PropTypes.number.isRequired,
+    ModuleImageURL: PropTypes.string.isRequired
   }),
   handlers: PropTypes.exact({
     handleSelect: PropTypes.func.isRequired,
