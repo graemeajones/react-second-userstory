@@ -75,7 +75,7 @@ export default function MyStudents({module}) {
 
   // View ----------------------------------------
   const listActions = [
-    <ToolTipDecorator message="Add a new student">
+    <ToolTipDecorator key="ActionAdd" message="Add a new student">
       <Action.Add showText onClick={handleAddRequest} />
     </ToolTipDecorator>
   ];

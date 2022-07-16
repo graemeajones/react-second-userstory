@@ -93,7 +93,7 @@ export default function MyModules() {
 
   // View ----------------------------------------
   const listActions = [
-    <ToolTipDecorator message="Add a new module">
+    <ToolTipDecorator key="ActionAdd" message="Add a new module">
       <Action.Add showText onClick={handleAddRequest} />
     </ToolTipDecorator>
   ];
