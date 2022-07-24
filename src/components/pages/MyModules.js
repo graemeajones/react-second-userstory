@@ -35,14 +35,48 @@ export default function MyModules() {
     modules.map((module) => module.ModuleID === id ? { ...module, isSubscribed: false } : module)
   );
 
-  // Delete handlers
+  // Add, modify and delete handlers
+  const handleAdd = async (newModule) => {
+    handleDismiss();
+    const outcome = await moduleAccessor.create(newModule);
+    outcome.success
+      ? loadModules()
+      : buildErrorModal("Add module error", outcome.response);
+  }
+
+  const handleModify = async (targetModule) => {
+    handleDismiss();
+    console.log(JSON.stringify(targetModule));
+    const outcome = await moduleAccessor.update(targetModule.ModuleID, targetModule);
+    outcome.success
+      ? loadModules()
+      : buildErrorModal("Modify module error", outcome.response);
+  }
+
   const handleDelete = async (id) => {
     handleDismiss();
     const outcome = await moduleAccessor.delete(id);
-    outcome.success && loadModules();
+    outcome.success
+      ? loadModules()
+      : buildErrorModal("Delete module error", outcome.response);
   }
 
-  const handleDeleteRequest = (module) => handleModal({
+  // Build modal methods
+  const buildAddModal = () => handleModal({
+    show: true,
+    title: "Add new module",
+    content: <ModuleForm onSubmit={handleAdd} onCancel={handleDismiss} />,
+    actions: null
+  });
+
+  const buildModifyModal = (targetModule) => handleModal({
+    show: true,
+    title: "Modify module",
+    content: <ModuleForm onSubmit={handleModify} onCancel={handleDismiss} initialModule={targetModule} />,
+    actions: null
+  });
+
+  const buildDeleteModal = (module) => handleModal({
     show: true,
     title: "Alert!",
     content: <p>Are you sure you want to delete module {module.ModuleCode} {module.ModuleName}?</p>,
@@ -56,45 +90,23 @@ export default function MyModules() {
     ]
   });
 
-  // Add handlers
-  const handleAdd = async (newModule) => {
-    handleDismiss();
-    newModule.ModuleCohortID = 1; // Todo: This needs removing
-    newModule.ModuleLeaderID = 820; // Todo: This needs removing
-    const outcome = await moduleAccessor.create(newModule);
-    outcome.success && loadModules();
-  }
-
-  const handleAddRequest = () => handleModal({
+  const buildErrorModal = (title, message) => handleModal({
     show: true,
-    title: "Add new module",
-    content: <ModuleForm onSubmit={handleAdd} onCancel={handleDismiss} />,
-    actions: null
+    title: title,
+    content: <p>{message}</p>,
+    actions: [
+      <ToolTipDecorator key="ActionNo" message="Click to dismiss error message">
+        <Action.Dismiss showText onClick={() => handleDismiss()} />
+      </ToolTipDecorator>
+    ]
   });
 
-  // Modify handlers
-  const handleModify = async (targetModule) => {
-    handleDismiss();
-    delete targetModule.ModuleCohort; // Todo: This needs removing
-    delete targetModule.ModuleLead; // Todo: This needs removing
-    const outcome = await moduleAccessor.update(targetModule.ModuleID, targetModule);
-    outcome.success && loadModules();
-  }
-
-  const handleModifyRequest = (targetModule) => handleModal({
-    show: true,
-    title: "Modify module",
-    content: <ModuleForm onSubmit={handleModify} onCancel={handleDismiss} initialModule={targetModule} />,
-    actions: null
-  });
-
-  // Modal handler
   const handleDismiss = () => handleModal(false);
 
   // View ----------------------------------------
   const listActions = [
     <ToolTipDecorator key="ActionAdd" message="Add a new module">
-      <Action.Add showText onClick={handleAddRequest} />
+      <Action.Add showText onClick={buildAddModal} />
     </ToolTipDecorator>
   ];
 
@@ -112,8 +124,8 @@ export default function MyModules() {
           handleSelect,
           handleSubscribe,
           handleUnsubscribe,
-          handleModify: handleModifyRequest,
-          handleDelete: handleDeleteRequest
+          handleModify: buildModifyModal,
+          handleDelete: buildDeleteModal
         }}
       />
     </>

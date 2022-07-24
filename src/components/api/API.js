@@ -26,7 +26,10 @@ export const apiCall = async (endpoint, method, body) => {
     else return { success: false, response: response };
   }
   catch (error) {
-    return { success: false, response: error };
+    return {
+      success: false,
+      response: Object.keys(error).length === 0 ? "Fetch error: no error message provided" : JSON.stringify(error)
+    };
   }
 }
 

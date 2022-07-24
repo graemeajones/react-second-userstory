@@ -5,7 +5,8 @@ import Form from '../../UI/Form.js';
 import RenderCount from '../../UI/RenderCount.js';
 
 
-const emptyModule = { ModuleName: "", ModuleCode: "", ModuleLevel: 0, ModuleLeaderID: 0, ModuleImageURL: "" };
+// const emptyModule = { ModuleName: "", ModuleCode: "", ModuleLevel: 0, ModuleLeaderID: 0, ModuleImageURL: "" };
+const emptyModule = { ModuleName: "React Programming", ModuleCode: "RP1234", ModuleLevel: 5, ModuleLeaderID: 0, ModuleImageURL: "https://images.freeimages.com/images/small-previews/fa1/cable-5-1243077.jpg" };
 
 export default function ModuleForm({ onSubmit, onCancel, initialModule = emptyModule }) {
   
