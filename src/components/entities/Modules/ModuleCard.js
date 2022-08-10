@@ -16,7 +16,11 @@ ModuleCard.propTypes = {
     ModuleName: PropTypes.string.isRequired,
     ModuleCode: PropTypes.string.isRequired,
     ModuleLevel: PropTypes.number.isRequired,
-    ModuleImageURL: PropTypes.string.isRequired
+    ModuleImageURL: PropTypes.string.isRequired,
+    ModuleYearID: PropTypes.number.isRequired,
+    ModuleYearName: PropTypes.string.isRequired,
+    ModuleLeaderID: PropTypes.number.isRequired,
+    ModuleLeaderName: PropTypes.string.isRequired
   }),
   handlers: PropTypes.exact({
     handleSelect: PropTypes.func.isRequired,
@@ -45,16 +49,17 @@ export default function ModuleCard({module,handlers}) {
 
         <div className="moduleCardLayout">
 
-          <div className="cardImage"  onClick={() => handlers.handleSelect(module.ModuleID)}>
+          <div className="cardImage"  onClick={() => handlers.handleSelect(module)}>
             <img src={module.ModuleImageURL} alt="Visual representation of module" />
           </div>
 
-          <div className="cardDetails"  onClick={() => handlers.handleSelect(module.ModuleID)}>
+          <div className="cardDetails"  onClick={() => handlers.handleSelect(module)}>
             <h1>{module.ModuleName} ({module.ModuleCode})</h1>
             <p>
               <span className="cardAttribute">Level</span>
-              <span className="cardValue">{module.ModuleLevel}</span>
+              <span className="cardValue">{module.ModuleLevel} ({module.ModuleYearName})</span>
             </p>
+
           </div>
 
           <div className="cardActions">

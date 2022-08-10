@@ -17,6 +17,7 @@ StudentCard.propTypes = {
     UserPassword: PropTypes.string.isRequired,
     UserRegistered: PropTypes.bool.isRequired,
     UserUsertypeID: PropTypes.number.isRequired,
+    UserUsertypeName: PropTypes.string.isRequired,
     UserLevel: PropTypes.number.isRequired,
     UserImageURL: PropTypes.string.isRequired
   }),
@@ -50,7 +51,7 @@ export default function StudentCard({student,handlers}) {
               <h1>{student.UserFirstname} {student.UserLastname.toUpperCase()}</h1>
               <p>
                 <span className="cardAttribute">Level</span>
-                <span className="cardValue">{student.UserLevel}</span>
+                <span className="cardValue">{student.UserLevel} {student.UserUsertypeName}</span>
               </p>
               <p>
                 <span className="cardAttribute">{student.UserEmail}</span>

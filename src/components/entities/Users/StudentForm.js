@@ -1,3 +1,6 @@
+import { useMemo } from 'react';
+import Accessor from '../../model/Accessor.js';
+import useLoad from '../../model/useLoad.js';
 import Form from '../../UI/Form.js';
 
 import RenderCount from '../../UI/RenderCount.js';
@@ -15,9 +18,12 @@ const emptyUser = {
 }
 
 export default function StudentForm({ onSubmit, onCancel, initialUser = emptyUser }) {
-  
+  // Initialisation ------------------------------
+  const usertypeAccessor = useMemo(() => new Accessor('Usertypes'), []);
+
   // State ---------------------------------------
   const [user, setUser, errors, setErrors] = Form.useFormState(initialUser);
+  const [usertypes, , loadingUsertypesMessage,] = useLoad(usertypeAccessor);
   
   // Handlers ------------------------------------
   const handleSubmit = (event) => {
@@ -119,18 +125,24 @@ export default function StudentForm({ onSubmit, onCancel, initialUser = emptyUse
         label="User type"
         error={errors.UserUsertypeID}
       >
-        <select
-          name="UserUsertypeID"
-          value={user.UserUsertypeID}
-          onChange={handleChange} 
-        >
-          <option value="0" disabled>Select user type</option>
-            {
-              [{id: 1, name: "Staff"},{id: 2, name: "Student"}].map((type) => 
-                <option key={type.id} value={type.id}>{type.name}</option>
-              )
-            }
-        </select>
+        {
+          !usertypes
+            ? <p>{loadingUsertypesMessage}</p>
+            : usertypes.length === 0
+              ? <p>No years found</p>
+              : <select
+                  name="UserUsertypeID"
+                  value={user.UserUsertypeID}
+                  onChange={handleChange} 
+                >
+                  <option key="0" value="0">Select user type ...</option>
+                  {
+                    usertypes.map((usertype) => 
+                      <option key={usertype.UsertypeID} value={usertype.UsertypeID}> {usertype.UsertypeName} </option>
+                    )
+                  }
+                </select>
+        }
       </Form.Item>
 
       <Form.Item

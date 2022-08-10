@@ -1,4 +1,5 @@
-import userAccessor from '../model/userAccessor.js';
+import { useMemo } from 'react';
+import Accessor from '../model/Accessor.js';
 import useLoad from '../model/useLoad.js';
 import Modal from '../UI/Modal.js';
 import ToolTipDecorator from '../UI/ToolTipDecorator.js';
@@ -10,7 +11,9 @@ import RenderCount from '../UI/RenderCount.js';
 
 
 export default function MyStudents({module}) {
-  // Properties ----------------------------------
+  // Initialisation ------------------------------
+  const userAccessor = useMemo(() => new Accessor('Classlists'), []);
+  
   // State ---------------------------------------
   const [students, , loadingMessage, loadStudents] = useLoad(userAccessor);
   

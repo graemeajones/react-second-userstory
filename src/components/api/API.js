@@ -23,7 +23,8 @@ export const apiCall = async (endpoint, method, body) => {
     const response = await fetch(endpointAddress, requestObj);
     if ((response.status >= 200) && (response.status <= 299))
       return { success: true, response: await response.json() };
-    else return { success: false, response: response };
+    else
+      return { success: false, response: await response.json() };
   }
   catch (error) {
     return {

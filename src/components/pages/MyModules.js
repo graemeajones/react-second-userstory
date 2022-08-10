@@ -1,5 +1,6 @@
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import moduleAccessor from '../model/moduleAccessor.js';
+import Accessor from '../model/Accessor.js';
 import useLoad from '../model/useLoad.js';
 import Modal from '../UI/Modal.js';
 import ModuleList from '../entities/Modules/ModuleList.js';
@@ -13,7 +14,8 @@ import RenderCount from '../UI/RenderCount.js';
 
 
 export default function MyModules() {
-  // Properties ----------------------------------
+  // Initialisation ------------------------------
+  const moduleAccessor = useMemo(() => new Accessor('Modules'), []);
   const navigate = useNavigate();
 
   // State ---------------------------------------
@@ -41,16 +43,15 @@ export default function MyModules() {
     const outcome = await moduleAccessor.create(newModule);
     outcome.success
       ? loadModules()
-      : buildErrorModal("Add module error", outcome.response);
+      : buildErrorModal("Add module error", outcome.response.message);
   }
 
   const handleModify = async (targetModule) => {
     handleDismiss();
-    console.log(JSON.stringify(targetModule));
     const outcome = await moduleAccessor.update(targetModule.ModuleID, targetModule);
     outcome.success
       ? loadModules()
-      : buildErrorModal("Modify module error", outcome.response);
+      : buildErrorModal("Modify module error", outcome.response.message);
   }
 
   const handleDelete = async (id) => {
@@ -58,7 +59,7 @@ export default function MyModules() {
     const outcome = await moduleAccessor.delete(id);
     outcome.success
       ? loadModules()
-      : buildErrorModal("Delete module error", outcome.response);
+      : buildErrorModal("Delete module error", outcome.response.message);
   }
 
   // Build modal methods

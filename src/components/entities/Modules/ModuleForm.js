@@ -1,18 +1,29 @@
-import userAccessor from '../../model/userAccessor.js';
+import { useMemo } from 'react';
+import Accessor from '../../model/Accessor.js';
 import useLoad from '../../model/useLoad.js';
 import Form from '../../UI/Form.js';
 
 import RenderCount from '../../UI/RenderCount.js';
 
 
-// const emptyModule = { ModuleName: "", ModuleCode: "", ModuleLevel: 0, ModuleLeaderID: 0, ModuleImageURL: "" };
-const emptyModule = { ModuleName: "React Programming", ModuleCode: "RP1234", ModuleLevel: 5, ModuleLeaderID: 0, ModuleImageURL: "https://images.freeimages.com/images/small-previews/fa1/cable-5-1243077.jpg" };
+const emptyModule = {
+  ModuleName: "",
+  ModuleCode: "",
+  ModuleLevel: 0,
+  ModuleYearID: 0,
+  ModuleLeaderID: 0,
+  ModuleImageURL: "https://images.freeimages.com/images/small-previews/fa1/cable-5-1243077.jpg"
+};
 
 export default function ModuleForm({ onSubmit, onCancel, initialModule = emptyModule }) {
+  // Initialisation ------------------------------
+  const userAccessor = useMemo(() => new Accessor('Users'), []);
+  const yearAccessor = useMemo(() => new Accessor('Years'), []);
   
   // State ---------------------------------------
   const [module, setModule, errors, setErrors] = Form.useFormState(initialModule);
-  const [staff, ,loadingMessage, ] = useLoad(userAccessor);
+  const [years, ,loadingYearsMessage, ] = useLoad(yearAccessor);
+  const [staff, ,loadingUsersMessage, ] = useLoad(userAccessor);
   
   // Handlers ------------------------------------
   const handleSubmit = (event) => {
@@ -23,7 +34,7 @@ export default function ModuleForm({ onSubmit, onCancel, initialModule = emptyMo
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    const newValue = (name === 'ModuleLevel') || (name === 'ModuleLeaderID') ? parseInt(value) : value;
+    const newValue = (name === 'ModuleLevel') || (name === 'ModuleYearID') || (name === 'ModuleLeaderID') ? parseInt(value) : value;
     setModule({ ...module, [name]: newValue });
     setErrors({ ...errors, [name]: isValid[name](newValue) ? null : errorMessage[name] });
   };
@@ -46,6 +57,7 @@ export default function ModuleForm({ onSubmit, onCancel, initialModule = emptyMo
     ModuleCode: (code) => /^\D{2}\d{4}$/.test(code),
     ModuleLevel: (level) => (level > 2) && (level < 8),
     ModuleLeaderID: (id) => id !== 0,
+    ModuleYearID: (id) => id !== 0,
     ModuleImageURL: (url) => /^(http|https):\/\/(([a-zA-Z0-9$\-_.+!*'(),;:&=]|%[0-9a-fA-F]{2})+@)?(((25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9]|[1-9][0-9]|[0-9])(\.(25[0-5]|2[0-4][0-9]|[0-1][0-9][0-9]|[1-9][0-9]|[0-9])){3})|localhost|([a-zA-Z0-9\-\u00C0-\u017F]+\.)+([a-zA-Z]{2,}))(:[0-9]+)?(\/(([a-zA-Z0-9$\-_.+!*'(),;:@&=]|%[0-9a-fA-F]{2})*(\/([a-zA-Z0-9$\-_.+!*'(),;:@&=]|%[0-9a-fA-F]{2})*)*)?(\?([a-zA-Z0-9$\-_.+!*'(),;:@&=/?]|%[0-9a-fA-F]{2})*)?(#([a-zA-Z0-9$\-_.+!*'(),;:@&=/?]|%[0-9a-fA-F]{2})*)?)?$/.test(url)
   };
     
@@ -54,6 +66,7 @@ export default function ModuleForm({ onSubmit, onCancel, initialModule = emptyMo
     ModuleCode: "Module code is not a valid format",
     ModuleLevel: "Invalid module level",
     ModuleLeaderID: "No module leader has been selected",
+    ModuleYearID: "No delivery year has been selected",
     ModuleImageURL: "Module image is not a valid URL"
   }
 
@@ -107,12 +120,36 @@ export default function ModuleForm({ onSubmit, onCancel, initialModule = emptyMo
       </Form.Item>
 
       <Form.Item
+        label="Module year"
+        error={errors.ModuleYearID}
+      >
+        {
+          !years
+            ? <p>{loadingYearsMessage}</p>
+            : years.length === 0
+              ? <p>No years found</p>
+              : <select
+                  name="ModuleYearID"
+                  value={module.ModuleYearID}
+                  onChange={handleChange} 
+                >
+                  <option value="0">Select delivery year ...</option>
+                  {
+                    years.map((year) => 
+                      <option key={year.YearID} value={year.YearID}> {year.YearName} </option>
+                    )
+                  }
+                </select>
+        }
+      </Form.Item>
+
+      <Form.Item
         label="Module leader"
         error={errors.ModuleLeaderID}
       >
         {
           !staff
-            ? <p>{loadingMessage}</p>
+            ? <p>{loadingUsersMessage}</p>
             : staff.length === 0
               ? <p>No users found</p>
               : <select
